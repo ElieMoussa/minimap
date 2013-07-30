@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+  <head>
+    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="js/html2canvas.js"></script>
+
+
+
+   
+    <title>
+      Minimap
+    </title>
+
+  </head>
+<style>
+body{
+	margin:0;
+	border:0;
+}
+#minimap{
+	position:fixed;
+	margin:0;
+	border:0;
+	z-index:3;
+}
+#draggable{
+	border:dotted;
+	width:250px;
+	position:absolute;
+}
+</style>
+  <body>  
+  <div id="minimap">
+  	<div id="draggable"></div>
+  </div>
+
+  <div style="position:fixed;" id="myframe"></div>
+ 
+  <table align="center" style="background-color:#CCC">
+  	<Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <tr><Td></Td></tr>
+    
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+    <Tr><Td>testing</Td></Tr>
+  </table>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+  <div><img src="images/aftervote_n.png"></div>
+
+
+ <script type="text/javascript">
+      $(document).ready(function() {
+        html2canvas( [ document.body ], {			
+          onrendered: function(canvas) {
+		
+			$("#minimap").fadeOut(1);
+
+            document.getElementById('minimap').appendChild(canvas).className = "minimap";
+			
+			$(".minimap").css({"width":250});
+			
+			var wind_height = $(window).height();
+		
+			var minimap_height = $(".minimap").height();
+			
+			if(wind_height < minimap_height)
+			{
+				var fixed_mini_height = wind_height;
+			}
+			else
+			{
+				var fixed_mini_height = minimap_height
+			}
+
+			$(".minimap").css({"height":fixed_mini_height});
+			
+          }
+        });
+      });
+	  
+
+$(window).load(function(e) {
+	  
+	  	var wind_height = $(window).height();
+		var wind_width = $(window).width();
+		
+		var doc_height = $(document).height();
+		
+		
+		var screen_height_percent = (wind_height * 100) / doc_height;
+		
+		var virtual_screen_height = (wind_height * screen_height_percent) / 100;
+		
+		$("#draggable").css({"height":virtual_screen_height});
+		
+		$("#myframe").css({"width":wind_width,
+							"height":wind_height});
+		
+		var mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel" //FF doesn't recognize mousewheel as of FF3.x
+		$(window).bind(mousewheelevt, function(e){
+		
+			var evt = window.event || e //equalize event object     
+			evt = evt.originalEvent ? evt.originalEvent : evt; //convert to originalEvent if possible               
+			var delta = evt.detail ? evt.detail*(-40) : evt.wheelDelta //check for detail first, because it is used by Opera and FF
+		
+			if(delta > 0) {
+				//scroll up
+				
+				var mytop = $("#myframe").offset().top;
+				var frame_top = (mytop * 100) / doc_height;
+				var drag_top = (wind_height * frame_top) / 100;
+				
+				if(drag_top == 0)
+				{
+					$("#minimap").fadeOut(500);
+				}
+				else
+				{
+					$("#minimap").fadeIn(500);
+				}
+				$("#draggable").css({"margin-top": drag_top});
+			}
+			else{
+				//scroll down
+				var mytop = $("#myframe").offset().top;
+				var frame_top = (mytop * 100) / doc_height;
+				var drag_top = (wind_height * frame_top) / 100;
+				
+				if(drag_top > 0)
+				{
+					$("#minimap").fadeIn(500);
+				}
+				$("#draggable").css({"margin-top": drag_top});
+			}
+		});
+		
+		
+    });
+</script>
+  </body>
+</html>
